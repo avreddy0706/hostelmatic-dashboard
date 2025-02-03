@@ -13,6 +13,7 @@ export interface Tenant {
   email: string;
   roomId: string;
   joinDate: string;
+  monthlyFee: number; // Added monthly fee
 }
 
 export interface Payment {

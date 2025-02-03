@@ -26,6 +26,7 @@ const Tenants = () => {
     email: "",
     roomId: "",
     joinDate: "",
+    monthlyFee: "", // Added monthly fee field
   });
 
   const availableRooms = rooms.filter(room => room.occupiedBeds < room.totalBeds);
@@ -36,6 +37,7 @@ const Tenants = () => {
     const tenantData = {
       id: editingTenant?.id || Date.now().toString(),
       ...newTenant,
+      monthlyFee: Number(newTenant.monthlyFee), // Convert to number
     };
 
     if (editingTenant) {
@@ -58,6 +60,7 @@ const Tenants = () => {
       email: "",
       roomId: "",
       joinDate: "",
+      monthlyFee: "",
     });
     setEditingTenant(null);
     setShowForm(false);
@@ -71,6 +74,7 @@ const Tenants = () => {
       email: tenant.email,
       roomId: tenant.roomId,
       joinDate: tenant.joinDate,
+      monthlyFee: tenant.monthlyFee.toString(), // Set monthly fee for editing
     });
     setShowForm(true);
   };
@@ -157,6 +161,16 @@ const Tenants = () => {
                   required
                 />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="monthlyFee">Monthly Fee</Label>
+                <Input
+                  id="monthlyFee"
+                  type="number"
+                  value={newTenant.monthlyFee}
+                  onChange={(e) => setNewTenant({ ...newTenant, monthlyFee: e.target.value })}
+                  required
+                />
+              </div>
             </div>
             <div className="flex justify-end gap-2">
               <Button 
@@ -170,6 +184,7 @@ const Tenants = () => {
                     email: "",
                     roomId: "",
                     joinDate: "",
+                    monthlyFee: "",
                   });
                 }}
               >
