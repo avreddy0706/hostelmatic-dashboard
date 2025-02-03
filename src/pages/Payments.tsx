@@ -33,10 +33,11 @@ const Payments = () => {
   };
 
   const togglePaymentStatus = (payment: Payment) => {
+    const newStatus: "paid" | "unpaid" = payment.status === "paid" ? "unpaid" : "paid";
     const updatedPayment: Payment = {
       ...payment,
-      status: payment.status === "paid" ? "unpaid" : "paid",
-      paidDate: payment.status === "paid" ? undefined : new Date().toISOString(),
+      status: newStatus,
+      paidDate: newStatus === "paid" ? new Date().toISOString() : undefined,
     };
     updatePayment(updatedPayment);
     toast({
