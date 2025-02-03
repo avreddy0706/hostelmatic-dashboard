@@ -35,7 +35,7 @@ const Payments = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const paymentData = {
+    const paymentData: Payment = {
       id: editingPayment?.id || Date.now().toString(),
       tenantId: newPayment.tenantId,
       amount: Number(newPayment.amount),
@@ -43,7 +43,7 @@ const Payments = () => {
       status: editingPayment?.status || "unpaid",
       dueDate: newPayment.dueDate,
       paidDate: editingPayment?.paidDate,
-    } as Payment;
+    };
 
     if (editingPayment) {
       updatePayment(paymentData);
@@ -70,7 +70,7 @@ const Payments = () => {
   };
 
   const togglePaymentStatus = (payment: Payment) => {
-    const updatedPayment = {
+    const updatedPayment: Payment = {
       ...payment,
       status: payment.status === "paid" ? "unpaid" : "paid",
       paidDate: payment.status === "paid" ? undefined : new Date().toISOString(),
