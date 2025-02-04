@@ -8,6 +8,7 @@ import { useStore } from "@/lib/store";
 import { Payment, Tenant } from "@/lib/types";
 import PaymentList from "./payments/PaymentList";
 import MonthSelector from "./payments/MonthSelector";
+import CreatePaymentDialog from "@/components/payments/CreatePaymentDialog";
 
 const Payments = () => {
   const { toast } = useToast();
@@ -162,6 +163,7 @@ const Payments = () => {
         </div>
         <div className="flex gap-4">
           <MonthSelector value={selectedMonth} onChange={setSelectedMonth} />
+          <CreatePaymentDialog />
           <Button onClick={exportData}>
             <Download className="w-4 h-4 mr-2" />
             Export Data
