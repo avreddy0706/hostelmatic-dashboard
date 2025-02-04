@@ -25,7 +25,7 @@ import { Payment, Tenant } from "@/lib/types";
 
 const Payments = () => {
   const { toast } = useToast();
-  const { tenants, payments, updatePayment } = useStore();
+  const { tenants, payments, updatePayment, addPayment } = useStore();
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), "yyyy-MM"));
 
   const getNextPaymentDate = (joinDate: string) => {
@@ -42,7 +42,32 @@ const Payments = () => {
     return nextPayment;
   };
 
-  const handleStatusChange = (payment: Payment, newStatus: "paid" | "unpaid" | "partially-paid") => {
+  const getOrCreatePayment = (tenant: Tenant): Payment => {
+    const existingPayment = payments.find(
+      (p) => p.tenantId === tenant.id && p.month.startsWith(selectedMonth)
+    );
+
+    if (existingPayment) {
+      return existingPayment;
+    }
+
+    const dueDate = getNextPaymentDate(tenant.joinDate);
+    const newPayment: Payment = {
+      id: `${tenant.id}-${selectedMonth}`,
+      tenantId: tenant.id,
+      amount: tenant.monthlyFee,
+      month: selectedMonth,
+      status: "unpaid",
+      dueDate: dueDate.toISOString(),
+      remarks: "",
+    };
+
+    addPayment(newPayment);
+    return newPayment;
+  };
+
+  const handleStatusChange = (tenant: Tenant, newStatus: Payment["status"]) => {
+    const payment = getOrCreatePayment(tenant);
     const updatedPayment: Payment = {
       ...payment,
       status: newStatus,
@@ -55,7 +80,8 @@ const Payments = () => {
     });
   };
 
-  const handleRemarksChange = (payment: Payment, remarks: string) => {
+  const handleRemarksChange = (tenant: Tenant, remarks: string) => {
+    const payment = getOrCreatePayment(tenant);
     const updatedPayment: Payment = {
       ...payment,
       remarks,
@@ -186,17 +212,7 @@ const Payments = () => {
                     <Select
                       value={payment?.status || "unpaid"}
                       onValueChange={(value: Payment["status"]) =>
-                        handleStatusChange(
-                          payment || {
-                            id: Date.now().toString(),
-                            tenantId: tenant.id,
-                            amount: tenant.monthlyFee,
-                            month: selectedMonth,
-                            status: "unpaid",
-                            dueDate: dueDate.toISOString(),
-                          },
-                          value
-                        )
+                        handleStatusChange(tenant, value)
                       }
                     >
                       <SelectTrigger className="w-[140px]">
@@ -225,17 +241,7 @@ const Payments = () => {
                     <Input
                       value={payment?.remarks || ""}
                       onChange={(e) =>
-                        handleRemarksChange(
-                          payment || {
-                            id: Date.now().toString(),
-                            tenantId: tenant.id,
-                            amount: tenant.monthlyFee,
-                            month: selectedMonth,
-                            status: "unpaid",
-                            dueDate: dueDate.toISOString(),
-                          },
-                          e.target.value
-                        )
+                        handleRemarksChange(tenant, e.target.value)
                       }
                       placeholder="Add remarks..."
                       className="max-w-[200px]"
