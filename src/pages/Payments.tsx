@@ -1,46 +1,18 @@
 
 import { useState } from "react";
-import { format, addMonths, startOfMonth } from "date-fns";
+import { format } from "date-fns";
 import { Download, CheckSquare, XSquare, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { useStore } from "@/lib/store";
 import { Payment, Tenant } from "@/lib/types";
+import PaymentList from "./payments/PaymentList";
+import MonthSelector from "./payments/MonthSelector";
 
 const Payments = () => {
   const { toast } = useToast();
   const { tenants, payments, updatePayment, addPayment } = useStore();
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), "yyyy-MM"));
-
-  const getNextPaymentDate = (joinDate: string) => {
-    const currentDate = new Date();
-    const join = new Date(joinDate);
-    const paymentDay = join.getDate();
-    let nextPayment = startOfMonth(currentDate);
-    nextPayment.setDate(paymentDay);
-    
-    if (nextPayment < currentDate) {
-      nextPayment = addMonths(nextPayment, 1);
-    }
-    
-    return nextPayment;
-  };
 
   const getOrCreatePayment = (tenant: Tenant): Payment => {
     const existingPayment = payments.find(
@@ -51,14 +23,29 @@ const Payments = () => {
       return existingPayment;
     }
 
-    const dueDate = getNextPaymentDate(tenant.joinDate);
+    // Only create payment if tenant has already joined
+    const joinDate = new Date(tenant.joinDate);
+    const selectedDate = new Date(selectedMonth);
+    
+    if (joinDate > selectedDate) {
+      return {
+        id: `${tenant.id}-${selectedMonth}`,
+        tenantId: tenant.id,
+        amount: tenant.monthlyFee,
+        month: selectedMonth,
+        status: "unpaid",
+        dueDate: joinDate.toISOString(),
+        remarks: "Not joined yet",
+      };
+    }
+
     const newPayment: Payment = {
       id: `${tenant.id}-${selectedMonth}`,
       tenantId: tenant.id,
       amount: tenant.monthlyFee,
       month: selectedMonth,
       status: "unpaid",
-      dueDate: dueDate.toISOString(),
+      dueDate: joinDate.toISOString(),
       remarks: "",
     };
 
@@ -68,6 +55,18 @@ const Payments = () => {
 
   const handleStatusChange = (tenant: Tenant, newStatus: Payment["status"]) => {
     const payment = getOrCreatePayment(tenant);
+    
+    // Don't update if tenant hasn't joined yet
+    const joinDate = new Date(tenant.joinDate);
+    const selectedDate = new Date(selectedMonth);
+    if (joinDate > selectedDate) {
+      toast({
+        title: "Cannot update payment",
+        description: "Tenant hasn't joined yet for the selected month.",
+      });
+      return;
+    }
+
     const updatedPayment: Payment = {
       ...payment,
       status: newStatus,
@@ -82,22 +81,23 @@ const Payments = () => {
 
   const handleRemarksChange = (tenant: Tenant, remarks: string) => {
     const payment = getOrCreatePayment(tenant);
+    
+    // Don't update if tenant hasn't joined yet
+    const joinDate = new Date(tenant.joinDate);
+    const selectedDate = new Date(selectedMonth);
+    if (joinDate > selectedDate) {
+      toast({
+        title: "Cannot update remarks",
+        description: "Tenant hasn't joined yet for the selected month.",
+      });
+      return;
+    }
+
     const updatedPayment: Payment = {
       ...payment,
       remarks,
     };
     updatePayment(updatedPayment);
-  };
-
-  const generateMonthOptions = () => {
-    const options = [];
-    for (let i = 0; i < 12; i++) {
-      const date = addMonths(new Date(), i);
-      const value = format(date, "yyyy-MM");
-      const label = format(date, "MMMM yyyy");
-      options.push({ value, label });
-    }
-    return options;
   };
 
   const exportData = () => {
@@ -161,21 +161,7 @@ const Payments = () => {
           <p className="text-gray-500">Track and manage payments here</p>
         </div>
         <div className="flex gap-4">
-          <Select
-            value={selectedMonth}
-            onValueChange={setSelectedMonth}
-          >
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Select month" />
-            </SelectTrigger>
-            <SelectContent>
-              {generateMonthOptions().map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <MonthSelector value={selectedMonth} onChange={setSelectedMonth} />
           <Button onClick={exportData}>
             <Download className="w-4 h-4 mr-2" />
             Export Data
@@ -183,76 +169,14 @@ const Payments = () => {
         </div>
       </div>
 
-      <div className="border rounded-lg">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Tenant</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Due Date</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Paid Date</TableHead>
-              <TableHead>Remarks</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {tenants.map((tenant) => {
-              const payment = payments.find(
-                (p) => p.tenantId === tenant.id && p.month.startsWith(selectedMonth)
-              );
-
-              const dueDate = getNextPaymentDate(tenant.joinDate);
-
-              return (
-                <TableRow key={tenant.id}>
-                  <TableCell>{tenant.name}</TableCell>
-                  <TableCell>${tenant.monthlyFee}</TableCell>
-                  <TableCell>{format(dueDate, "dd MMM yyyy")}</TableCell>
-                  <TableCell>
-                    <Select
-                      value={payment?.status || "unpaid"}
-                      onValueChange={(value: Payment["status"]) =>
-                        handleStatusChange(tenant, value)
-                      }
-                    >
-                      <SelectTrigger className="w-[140px]">
-                        <div className="flex items-center gap-2">
-                          {getStatusIcon(payment?.status || "unpaid")}
-                          <span className="capitalize">
-                            {payment?.status || "unpaid"}
-                          </span>
-                        </div>
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="paid">Paid</SelectItem>
-                        <SelectItem value="unpaid">Unpaid</SelectItem>
-                        <SelectItem value="partially-paid">
-                          Partially Paid
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </TableCell>
-                  <TableCell>
-                    {payment?.paidDate
-                      ? format(new Date(payment.paidDate), "dd MMM yyyy")
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      value={payment?.remarks || ""}
-                      onChange={(e) =>
-                        handleRemarksChange(tenant, e.target.value)
-                      }
-                      placeholder="Add remarks..."
-                      className="max-w-[200px]"
-                    />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </div>
+      <PaymentList
+        tenants={tenants}
+        payments={payments}
+        selectedMonth={selectedMonth}
+        onStatusChange={handleStatusChange}
+        onRemarksChange={handleRemarksChange}
+        getStatusIcon={getStatusIcon}
+      />
     </div>
   );
 };
