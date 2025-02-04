@@ -26,7 +26,7 @@ export function DashboardSidebar() {
     <Sidebar>
       <SidebarContent>
         <div className="p-4">
-          <h1 className="text-xl font-bold text-primary">Hostel Manager</h1>
+          <h1 className="text-xl font-bold text-primary">Swathi Reddy Girls Hostel</h1>
         </div>
         <SidebarGroup>
           <SidebarGroupLabel>Management</SidebarGroupLabel>
