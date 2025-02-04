@@ -1,3 +1,4 @@
+
 export interface Room {
   id: string;
   floor: number;
@@ -13,7 +14,7 @@ export interface Tenant {
   email: string;
   roomId: string;
   joinDate: string;
-  monthlyFee: number; // Added monthly fee
+  monthlyFee: number;
 }
 
 export interface Payment {
@@ -21,7 +22,8 @@ export interface Payment {
   tenantId: string;
   amount: number;
   month: string;
-  status: "paid" | "unpaid";
+  status: "paid" | "unpaid" | "partially-paid";
   dueDate: string;
   paidDate?: string;
+  remarks?: string;
 }
