@@ -12,19 +12,21 @@ function DashboardContent() {
   
   return (
     <div className="min-h-screen flex w-full bg-dark-background text-dark-foreground dark:bg-dark-background">
+      {/* The sidebar component */}
       <DashboardSidebar />
       
-      <main className="flex-1 p-4 md:p-6 overflow-auto">
+      {/* Main content area that will adjust based on sidebar state */}
+      <main className="flex-1 p-4 md:p-6 overflow-auto transition-all duration-300">
         {isMobile && (
           <button 
             onClick={() => setOpen(true)}
-            className="fixed top-4 left-4 z-30 p-2 bg-primary rounded-md shadow-md flex items-center justify-center"
+            className="mb-4 p-2 bg-primary rounded-md shadow-md flex items-center justify-center"
             aria-label="Toggle menu"
           >
             <Menu size={24} color="white" />
           </button>
         )}
-        <div className="w-full max-w-7xl mx-auto mt-12 md:mt-0">
+        <div className="w-full max-w-7xl mx-auto">
           <Outlet />
         </div>
       </main>
