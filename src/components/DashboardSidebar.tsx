@@ -44,15 +44,19 @@ export function DashboardSidebar() {
     : {};
 
   return (
-    <Sidebar style={sidebarStyle}>
+    <Sidebar style={sidebarStyle} className="dark:bg-dark-secondary">
       <SidebarContent>
         {isMobile && (
           <div className="p-4 flex justify-between items-center">
-            <h1 className="text-xl font-bold text-primary">
+            <h1 className="text-xl font-bold text-dark-foreground">
               Swathi Reddy Girls Hostel
             </h1>
             <Menu
-              className="cursor-pointer"
+              className="cursor-pointer text-dark-foreground"
+              size={32}
+              strokeWidth={1.5}
+              fill="transparent"
+              
               onClick={() => setIsOpen(!isOpen)}
             />
           </div>
@@ -60,7 +64,7 @@ export function DashboardSidebar() {
         {!isMobile && (
           <div className="p-4">
             <h1 className="text-xl font-bold text-primary">
-              Swathi Reddy Girls Hostel
+              Swathi Reddy Girls Hostel 
             </h1>
           </div>
         )}
@@ -69,9 +73,13 @@ export function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton onClick={() => navigate(item.path)}>
-                    <item.icon className="w-4 h-4 mr-2" />
+                <SidebarMenuItem key={item.title} >
+                  <SidebarMenuButton
+                    onClick={() => navigate(item.path)}
+                    className="bg-dark-secondary hover:bg-primary"
+                  >
+                    <item.icon className="w-4 h-4 mr-2 text-dark-foreground" />
+
                     <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

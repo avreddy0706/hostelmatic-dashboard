@@ -8,7 +8,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <div
-        className={`min-h-screen flex w-full bg-gray-50 ${
+        className={`min-h-screen flex w-full bg-dark-background text-dark-foreground dark:bg-dark-background ${
           isMobile ? "relative" : ""
         }`}
       >

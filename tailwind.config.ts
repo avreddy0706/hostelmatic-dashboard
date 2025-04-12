@@ -19,42 +19,45 @@ export default {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        "dark-background": "#121212",
+        "dark-foreground": "#FFFFFF",
+        "dark-secondary": "#282828",
+        border: "#424242",
+        input: "#303030",
+        ring: "hsl(var(--ring))", //keep ring
+        background: "hsl(var(--background))", //keep background
+        foreground: "hsl(var(--foreground))",//keep foreground
         primary: {
-          DEFAULT: "#1E40AF",
-          foreground: "#FFFFFF",
+          DEFAULT: "#64B5F6",
+          foreground: "#000000",
         },
         secondary: {
-          DEFAULT: "#60A5FA",
-          foreground: "#1E293B",
+          DEFAULT: "#424242",
+          foreground: "#FFFFFF",
         },
         success: {
           DEFAULT: "#10B981",
           foreground: "#FFFFFF",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
+          DEFAULT: "hsl(var(--destructive))", //keep destructive
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "#616161",
+          foreground: "#FFFFFF",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "#80CBC4",
+          foreground: "#000000",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: "#212121",
+          foreground: "#FFFFFF",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "#212121",
+          foreground: "#FFFFFF",
         },
       },
       fontFamily: {
