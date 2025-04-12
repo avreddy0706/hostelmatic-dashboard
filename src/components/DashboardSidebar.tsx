@@ -43,65 +43,73 @@ export function DashboardSidebar() {
         position: "fixed",
         left: open ? "0" : "-100%",
         top: "0",
+        height: "100%",
         zIndex: 50,
         transition: "left 0.3s ease-in-out",
+        width: "85%", // Make mobile sidebar wider
+        maxWidth: "300px"
+      }
+    : {};
+
+  const overlayStyle: CSSProperties = isMobile && open
+    ? {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        zIndex: 40
       }
     : {};
 
   return (
-    <Sidebar style={sidebarStyle} className="dark:bg-dark-secondary">
-      <SidebarContent>
-        {isMobile && (
+    <>
+      {isMobile && open && (
+        <div 
+          style={overlayStyle} 
+          onClick={() => setOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <Sidebar style={sidebarStyle} className="dark:bg-dark-secondary shadow-lg">
+        <SidebarContent>
           <div className="p-4 flex justify-between items-center">
-            <h1 className="text-xl font-bold text-dark-foreground">
+            <h1 className="text-xl font-bold text-primary truncate">
               Swathi Reddy Girls Hostel
             </h1>
-            {open ? (
+            {isMobile && (
               <X 
-                className="cursor-pointer text-dark-foreground"
-                size={32}
+                className="cursor-pointer text-dark-foreground ml-2 flex-shrink-0"
+                size={24}
                 strokeWidth={1.5}
                 onClick={() => setOpen(false)}
               />
-            ) : (
-              <Menu
-                className="cursor-pointer text-dark-foreground"
-                size={32}
-                strokeWidth={1.5}
-                onClick={() => setOpen(true)}
-              />
             )}
           </div>
-        )}
-        {!isMobile && (
-          <div className="p-4">
-            <h1 className="text-xl font-bold text-primary">
-              Swathi Reddy Girls Hostel 
-            </h1>
-          </div>
-        )}
-        <SidebarGroup>
-          <SidebarGroupLabel>Management</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton 
-                    onClick={() => {
-                      navigate(item.path);
-                      if (isMobile) setOpen(false);
-                    }}
-                    className={`bg-dark-secondary hover:bg-primary ${location.pathname === item.path ? 'bg-primary text-white' : ''}`}
-                  >
-                    <item.icon className="w-4 h-4 mr-2 text-dark-foreground" />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
+          <SidebarGroup>
+            <SidebarGroupLabel>Management</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {menuItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton 
+                      onClick={() => {
+                        navigate(item.path);
+                        if (isMobile) setOpen(false);
+                      }}
+                      className={`bg-dark-secondary hover:bg-primary ${location.pathname === item.path ? 'bg-primary text-white' : ''}`}
+                    >
+                      <item.icon className="w-5 h-5 mr-3 text-dark-foreground" />
+                      <span className="text-base">{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+    </>
   );
 }
