@@ -40,7 +40,7 @@ export function DashboardSidebar() {
 
   const sidebarStyle: CSSProperties = isMobile
     ? {
-        position: "fixed" as const,
+        position: "fixed",
         left: open ? "0" : "-100%",
         top: "0",
         zIndex: 50,
