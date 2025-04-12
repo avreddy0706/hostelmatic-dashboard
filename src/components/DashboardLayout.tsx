@@ -1,10 +1,13 @@
+
 import { SidebarProvider, useSidebar } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "./DashboardSidebar";
 import { useMobile } from "@/hooks/use-mobile";
+import { Outlet } from "react-router-dom";
 
-export function DashboardLayout({ children }: { children: React.ReactNode }) {
+export function DashboardLayout() {
   const isMobile = useMobile();
   const { isOpen } = useSidebar();
+  
   return (
     <SidebarProvider>
       <div
@@ -19,7 +22,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           }`}
         >
           <div className={`w-full max-w-7xl mx-auto`}>
-            {children}
+            <Outlet />
           </div>
           {isMobile && isOpen && (
             <div
