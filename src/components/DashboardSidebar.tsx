@@ -1,4 +1,11 @@
-import { Home, Users, Building2, CreditCard, BarChart2 } from "lucide-react";
+import {
+  Home,
+  Users,
+  Building2,
+  CreditCard,
+  BarChart2,
+  Menu,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,6 +17,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router-dom";
+import { useMobile } from "@/hooks/use-mobile";
+import { useState } from "react";
 
 const menuItems = [
   { title: "Dashboard", icon: Home, path: "/" },
@@ -21,13 +30,40 @@ const menuItems = [
 
 export function DashboardSidebar() {
   const navigate = useNavigate();
+  const isMobile = useMobile();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const sidebarStyle = isMobile
+    ? {
+        position: "fixed",
+        left: isOpen ? "0" : "-100%",
+        top: "0",
+        zIndex: 50,
+        transition: "left 0.3s ease-in-out",
+      }
+    : {};
 
   return (
-    <Sidebar>
+    <Sidebar style={sidebarStyle}>
       <SidebarContent>
-        <div className="p-4">
-          <h1 className="text-xl font-bold text-primary">Swathi Reddy Girls Hostel</h1>
-        </div>
+        {isMobile && (
+          <div className="p-4 flex justify-between items-center">
+            <h1 className="text-xl font-bold text-primary">
+              Swathi Reddy Girls Hostel
+            </h1>
+            <Menu
+              className="cursor-pointer"
+              onClick={() => setIsOpen(!isOpen)}
+            />
+          </div>
+        )}
+        {!isMobile && (
+          <div className="p-4">
+            <h1 className="text-xl font-bold text-primary">
+              Swathi Reddy Girls Hostel
+            </h1>
+          </div>
+        )}
         <SidebarGroup>
           <SidebarGroupLabel>Management</SidebarGroupLabel>
           <SidebarGroupContent>
