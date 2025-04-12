@@ -17,7 +17,7 @@ export const PAYMENTS_ROUTE = '/payments';
 export const ANALYTICS_ROUTE = '/analytics';
 
 export const ROUTES = [
-  { path: '/', element: <Index /> },
+  { path: '/', element: <Navigate to={DASHBOARD_ROUTE} replace /> },
   { path: DASHBOARD_ROUTE, element: <Dashboard /> },
   { path: TENANTS_ROUTE, element: <Tenants /> },
   { path: ROOMS_ROUTE, element: <Rooms /> },

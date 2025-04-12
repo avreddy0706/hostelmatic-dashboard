@@ -1,3 +1,4 @@
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
@@ -42,7 +43,8 @@ const TableFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tfoot
     ref={ref}
-    className={cn(\n      \"bg-dark-secondary\",
+    className={cn(
+      "bg-dark-secondary",
       "border-t bg-muted/50 font-medium [&>tr]:last:border-b-0",
       className
     )}
@@ -57,9 +59,9 @@ const TableRow = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tr
     ref={ref}
-    className={cn(\n      "border-b border transition-colors hover:bg-accent hover:text-accent-foreground data-[state=selected]:bg-accent",\n      className\n    )}
-    {...props}\n  />\n))\nTableRow.displayName = "TableRow"\n\nconst TableHead = React.forwardRef<\n  HTMLTableCellElement,\n  React.ThHTMLAttributes<HTMLTableCellElement>\n>(({ className, ...props }, ref) => (\n  <th\n    ref={ref}\n    className={cn(\n      "h-12 px-4 text-left align-middle font-medium text-muted-foreground dark:text-dark-foreground [&:has([role=checkbox])]:pr-0",\n      className\n    )}
-      
+    className={cn(
+      "border-b border transition-colors hover:bg-accent hover:text-accent-foreground data-[state=selected]:bg-accent",
+      className
     )}
     {...props}
   />
@@ -73,7 +75,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
+      "h-12 px-4 text-left align-middle font-medium text-muted-foreground dark:text-dark-foreground [&:has([role=checkbox])]:pr-0",
       className
     )}
     {...props}
@@ -98,8 +100,8 @@ const TableCaption = React.forwardRef<
   React.HTMLAttributes<HTMLTableCaptionElement>
 >(({ className, ...props }, ref) => (
   <caption
-    ref={ref}\n    className={cn("mt-4 text-sm text-muted-foreground dark:text-dark-foreground", className)}
-    className={cn("mt-4 text-sm text-muted-foreground", className)}
+    ref={ref}
+    className={cn("mt-4 text-sm text-muted-foreground dark:text-dark-foreground", className)}
     {...props}
   />
 ))

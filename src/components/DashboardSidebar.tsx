@@ -1,3 +1,4 @@
+
 import {
   Home,
   Users,
@@ -5,6 +6,7 @@ import {
   CreditCard,
   BarChart2,
   Menu,
+  X
 } from "lucide-react";
 import {
   Sidebar,
@@ -15,23 +17,25 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar
 } from "@/components/ui/sidebar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useMobile } from "@/hooks/use-mobile";
-import { useState } from "react";
+import { DASHBOARD_ROUTE, TENANTS_ROUTE, ROOMS_ROUTE, PAYMENTS_ROUTE, ANALYTICS_ROUTE } from "@/routes";
 
 const menuItems = [
-  { title: "Dashboard", icon: Home, path: "/" },
-  { title: "Tenants", icon: Users, path: "/tenants" },
-  { title: "Rooms", icon: Building2, path: "/rooms" },
-  { title: "Payments", icon: CreditCard, path: "/payments" },
-  { title: "Analytics", icon: BarChart2, path: "/analytics" },
+  { title: "Dashboard", icon: Home, path: DASHBOARD_ROUTE },
+  { title: "Tenants", icon: Users, path: TENANTS_ROUTE },
+  { title: "Rooms", icon: Building2, path: ROOMS_ROUTE },
+  { title: "Payments", icon: CreditCard, path: PAYMENTS_ROUTE },
+  { title: "Analytics", icon: BarChart2, path: ANALYTICS_ROUTE },
 ];
 
 export function DashboardSidebar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const isMobile = useMobile();
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, setIsOpen } = useSidebar();
 
   const sidebarStyle = isMobile
     ? {
@@ -51,14 +55,21 @@ export function DashboardSidebar() {
             <h1 className="text-xl font-bold text-dark-foreground">
               Swathi Reddy Girls Hostel
             </h1>
-            <Menu
-              className="cursor-pointer text-dark-foreground"
-              size={32}
-              strokeWidth={1.5}
-              fill="transparent"
-              
-              onClick={() => setIsOpen(!isOpen)}
-            />
+            {isOpen ? (
+              <X 
+                className="cursor-pointer text-dark-foreground"
+                size={32}
+                strokeWidth={1.5}
+                onClick={() => setIsOpen(false)}
+              />
+            ) : (
+              <Menu
+                className="cursor-pointer text-dark-foreground"
+                size={32}
+                strokeWidth={1.5}
+                onClick={() => setIsOpen(true)}
+              />
+            )}
           </div>
         )}
         {!isMobile && (
@@ -73,13 +84,15 @@ export function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title} >
-                  <SidebarMenuButton
-                    onClick={() => navigate(item.path)}
-                    className="bg-dark-secondary hover:bg-primary"
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton 
+                    onClick={() => {
+                      navigate(item.path);
+                      if (isMobile) setIsOpen(false);
+                    }}
+                    className={`bg-dark-secondary hover:bg-primary ${location.pathname === item.path ? 'bg-primary text-white' : ''}`}
                   >
                     <item.icon className="w-4 h-4 mr-2 text-dark-foreground" />
-
                     <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
