@@ -6,11 +6,17 @@ export function useIsMobile(): boolean {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Update the state with the actual value once we're in the browser
-    setIsMobile(window.innerWidth < 768);
+    // Function to check if device is mobile
+    const checkIsMobile = () => {
+      return window.innerWidth < 768;
+    };
     
+    // Set initial value
+    setIsMobile(checkIsMobile());
+    
+    // Update on resize
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(checkIsMobile());
     };
 
     // Add event listener

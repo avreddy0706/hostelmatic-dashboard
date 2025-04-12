@@ -18,10 +18,10 @@ function DashboardContent() {
         {isMobile && (
           <button 
             onClick={() => setOpen(true)}
-            className="fixed top-4 left-4 z-50 p-2 bg-primary rounded-md shadow-md flex items-center justify-center"
+            className="fixed top-4 left-4 z-30 p-2 bg-primary rounded-md shadow-md flex items-center justify-center"
             aria-label="Toggle menu"
           >
-            <Menu size={24} />
+            <Menu size={24} color="white" />
           </button>
         )}
         <div className="w-full max-w-7xl mx-auto mt-12 md:mt-0">
