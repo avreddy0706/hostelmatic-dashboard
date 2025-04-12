@@ -1,12 +1,12 @@
 
 import { SidebarProvider, useSidebar } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "./DashboardSidebar";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Outlet } from "react-router-dom";
 
 export function DashboardLayout() {
-  const isMobile = useMobile();
-  const { isOpen, setIsOpen } = useSidebar();
+  const isMobile = useIsMobile();
+  const { open, setOpen } = useSidebar();
   
   return (
     <SidebarProvider>
@@ -14,16 +14,16 @@ export function DashboardLayout() {
         <DashboardSidebar />
         <main
           className={`flex-1 p-6 overflow-auto ${
-            isMobile && isOpen ? "absolute w-full h-full" : ""
+            isMobile && open ? "absolute w-full h-full" : ""
           }`}
         >
           <div className="w-full max-w-7xl mx-auto">
             <Outlet />
           </div>
-          {isMobile && isOpen && (
+          {isMobile && open && (
             <div
               className="fixed inset-0 bg-black opacity-50 z-40"
-              onClick={() => setIsOpen(false)}
+              onClick={() => setOpen(false)}
             />
           )}
         </main>

@@ -20,8 +20,9 @@ import {
   useSidebar
 } from "@/components/ui/sidebar";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { DASHBOARD_ROUTE, TENANTS_ROUTE, ROOMS_ROUTE, PAYMENTS_ROUTE, ANALYTICS_ROUTE } from "@/routes";
+import { CSSProperties } from "react";
 
 const menuItems = [
   { title: "Dashboard", icon: Home, path: DASHBOARD_ROUTE },
@@ -34,13 +35,13 @@ const menuItems = [
 export function DashboardSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const isMobile = useMobile();
-  const { isOpen, setIsOpen } = useSidebar();
+  const isMobile = useIsMobile();
+  const { open, setOpen } = useSidebar();
 
-  const sidebarStyle = isMobile
+  const sidebarStyle: CSSProperties = isMobile
     ? {
-        position: "fixed",
-        left: isOpen ? "0" : "-100%",
+        position: "fixed" as const,
+        left: open ? "0" : "-100%",
         top: "0",
         zIndex: 50,
         transition: "left 0.3s ease-in-out",
@@ -55,19 +56,19 @@ export function DashboardSidebar() {
             <h1 className="text-xl font-bold text-dark-foreground">
               Swathi Reddy Girls Hostel
             </h1>
-            {isOpen ? (
+            {open ? (
               <X 
                 className="cursor-pointer text-dark-foreground"
                 size={32}
                 strokeWidth={1.5}
-                onClick={() => setIsOpen(false)}
+                onClick={() => setOpen(false)}
               />
             ) : (
               <Menu
                 className="cursor-pointer text-dark-foreground"
                 size={32}
                 strokeWidth={1.5}
-                onClick={() => setIsOpen(true)}
+                onClick={() => setOpen(true)}
               />
             )}
           </div>
@@ -88,7 +89,7 @@ export function DashboardSidebar() {
                   <SidebarMenuButton 
                     onClick={() => {
                       navigate(item.path);
-                      if (isMobile) setIsOpen(false);
+                      if (isMobile) setOpen(false);
                     }}
                     className={`bg-dark-secondary hover:bg-primary ${location.pathname === item.path ? 'bg-primary text-white' : ''}`}
                   >
