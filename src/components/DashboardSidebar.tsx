@@ -5,7 +5,6 @@ import {
   Building2,
   CreditCard,
   BarChart2,
-  Menu,
   X
 } from "lucide-react";
 import {
@@ -79,12 +78,17 @@ export function DashboardSidebar() {
               Swathi Reddy Girls Hostel
             </h1>
             {isMobile && (
-              <X 
-                className="cursor-pointer text-dark-foreground ml-2 flex-shrink-0"
-                size={24}
-                strokeWidth={1.5}
+              <button
+                className="p-2 rounded-full hover:bg-dark-background"
                 onClick={() => setOpen(false)}
-              />
+                aria-label="Close menu"
+              >
+                <X 
+                  className="text-dark-foreground"
+                  size={24}
+                  strokeWidth={1.5}
+                />
+              </button>
             )}
           </div>
           <SidebarGroup>
@@ -98,7 +102,7 @@ export function DashboardSidebar() {
                         navigate(item.path);
                         if (isMobile) setOpen(false);
                       }}
-                      className={`bg-dark-secondary hover:bg-primary ${location.pathname === item.path ? 'bg-primary text-white' : ''}`}
+                      className={`w-full bg-dark-secondary hover:bg-primary ${location.pathname === item.path ? 'bg-primary text-white' : ''}`}
                     >
                       <item.icon className="w-5 h-5 mr-3 text-dark-foreground" />
                       <span className="text-base">{item.title}</span>

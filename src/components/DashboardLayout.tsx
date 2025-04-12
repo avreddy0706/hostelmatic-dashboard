@@ -4,7 +4,6 @@ import { DashboardSidebar } from "./DashboardSidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Outlet } from "react-router-dom";
 import { Menu } from "lucide-react";
-import { useState } from "react";
 
 // Create a separate component for the dashboard content so we can use the useSidebar hook
 function DashboardContent() {
